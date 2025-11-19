@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phase 1 – Read-Only Restricted Access</title>
+  <style>
+    body {
+      font-family: Aptos, sans-serif;
+      padding: 2em;
+      background-color: #f9f9f9; /* Light gray background */
+    }
+    h1 {
+      color: #00008B; /* Dark blue heading */
+      font-weight: bold;
+    }
+    p {
+      margin-bottom: 1.5em;
+    }
+    .button-link {
+      display: inline-block;
+      background-color: #4169e1; /* Royal blue */
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .button-link:hover {
+      background-color: #27408b; /* Darker blue on hover */
+    }
+  </style>
+</head>
+<body>
+  <h1>Phase 1 – Read-Only Restricted Access</h1>
+  <p>This phase introduces the initiative and explains why we’re moving to cloud-based file sharing.</p>
+  <div id="cards-container"></div>
+  <script>
+    // Load cards1.html into the container
+    fetch('cards1.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('cards-container').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading cards:', error));
+  </script>
+</body>
+</html>
