@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Phase 2 – Card Viewer</title>
+  <style>
+    body {
+      font-family: Aptos, sans-serif;
+      background-color: #87cefa; /* Light blue */
+      padding: 2em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      color: #00008B; /* Dark blue */
+      font-weight: bold;
+      margin-bottom: 1em;
+    }
+    .card-container {
+      width: 300px;
+      position: relative;
+      height: 200px; /* Fixed height for cards */
+    }
+    .card {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 1em;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: none;
+    }
+    .card.active {
+      display: block;
+    }
+    .navigation {
+      margin-top: 1em;
+      display: flex;
+      justify-content: space-between;
+      width: 300px;
+    }
+    button {
+      background-color: #4169e1; /* Royal blue */
+      color: white;
+      border: none;
+      padding: 0.5em 1em;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <h1>Phase 1 – Card Viewer</h1>
+  <div class="card-container">
+    <div class="card active">Card 2: Introduction to Phase 2</div>
+    <div class="card">Card 2: Why?</div>
+    <div class="card">Card 3: Benefits</div>
+    <div class="card">Card 4: Security</div>
+    <div class="card">Card 5: Compliance</div>
+    <div class="card">Card 6: User Stuff</div>
+    <div class="card">Card 7: Timelines</div>
+    <div class="card">Card 8: Supports</div>
+    <div class="card">Card 9: FAQs</div>
+    <div class="card">Card 10: Next Steps</div>
+  </div>
+  <div class="navigation">
+    <button id="prevBtn" disabled>Previous</button>
+    <button id="nextBtn">Next</button>
+  </div>
+
+  <script>
+    const cards = document.querySelectorAll('.card');
+    let currentIndex = 0;
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function updateCards() {
+      cards.forEach((card, index) => {
+        card.classList.toggle('active', index === currentIndex);
+      });
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === cards.length - 1;
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateCards();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < cards.length - 1) {
+        currentIndex++;
+        updateCards();
+      }
+    });
+  </script>
+</body>
+</html>
