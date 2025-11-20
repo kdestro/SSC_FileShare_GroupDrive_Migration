@@ -1,15 +1,7 @@
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phase 1 – Read-Only Restricted Access</title>
-  <style>
-    body {
-      font-family: Aptos, Arial, sans-serif;
+<htmlos, Arial, sans-serif;
       padding: 2em;
-      background-color: #f9f9f9; /* Light gray background */
+      background-color: #add8e6; /* Light blue background */
     }
     h1 {
       color: #00008B; /* Dark blue heading */
@@ -18,19 +10,32 @@
     p {
       margin-bottom: 1.5em;
     }
-    .button-link {
-      display: inline-block;
-      background-color: #add8e6; /* Light blue background */
+    .card {
+      display: none;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+           margin-top: 15px;
+    }
+    .nav-buttons button {
+      background-color: #00008B;
       color: white;
-      padding: 10px 15px;
+      border: none;
+      padding: 10px 20px;
+      margin: 0 10px;
       border-radius: 5px;
-      text-decoration: none;
-      font-weight: bold;
       font-size: 16px;
+      cursor: pointer;
       transition: background-color 0.3s ease;
     }
-    .button-link:hover {
-      background-color: #27408b; /* Darker blue on hover */
+    .nav-buttons button:hover {
+      background-color: #27408b;
+    }
+    .progress {
+      margin-top: 10px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -38,6 +43,7 @@
   <h1>Phase 1 – Read-Only Restricted Access</h1>
   <p>This phase introduces the initiative and explains why we’re moving to cloud-based file sharing.</p>
   <div id="cards-container"></div>
+
   <script>
     // Load cards1.html into the container
     fetch('cards1.html')
@@ -47,6 +53,29 @@
       })
       .then(data => {
         document.getElementById('cards-container').innerHTML = data;
+
+        // After loading, initialize card viewer logic
+        const cards = document.querySelectorAll('.card');
+        const progress = document.getElementById('progress');
+        let currentIndex = 0;
+
+        function updateCard() {
+          cards.forEach(card => card.classList.remove('active'));
+          cards[currentIndex].classList.add('active');
+          progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+          currentIndex = (currentIndex + 1) % cards.length;
+          updateCard();
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+          currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+          updateCard();
+        });
+
+        updateCard(); // Show first card
       })
       .catch(error => console.error('Error loading cards:', error));
   </script>
