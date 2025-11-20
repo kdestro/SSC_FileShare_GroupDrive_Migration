@@ -7,36 +7,53 @@
   <style>
     body {
       font-family: Aptos, sans-serif;
-      padding: 2em;
-      background-color: #f9f9f9; /* Light gray background */
+      margin: 0;
+      background-color: #d3d3d3; /* Grey background */
     }
-       p {
-      margin-bottom: 1.5em;
-    }
-    .card {
-      display: none;
+
+    header {
+      background-color: #00008B; /* Dark blue */
+      color: white;
+      text-align: center;
       padding: 20px;
+      font-size: 1.8em;
+      font-weight: bold;
     }
-    .card.active {
-      display: block;
-    }
+
     .viewer {
       max-width: 800px;
-      margin: 15px auto;
+      margin: 30px auto;
       background: white;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      margin-bottom: 20px;
       padding: 20px;
-      min-height: 300px; /* Enough space for large text */
+      min-height: 300px;
       overflow-y: auto;
+      text-align: center;
     }
+
+    .viewer h2 {
+      color: #4169E1; /* Royal blue */
+      margin-bottom: 20px;
+    }
+
+    .card {
+      display: none;
+      padding: 15px;
+      font-size: 1.1em;
+    }
+
+    .card.active {
+      display: block;
+    }
+
     .nav-buttons {
       text-align: center;
       margin-top: 15px;
     }
+
     .nav-buttons button {
-      background-color: #00008B;
+      background-color: #00008B; /* Dark blue */
       color: white;
       border: none;
       padding: 10px 20px;
@@ -45,9 +62,11 @@
       cursor: pointer;
       font-size: 16px;
     }
+
     .nav-buttons button:hover {
-      background-color: #27408b;
+      background-color: #27408b; /* Dark slate blue */
     }
+
     .progress {
       text-align: center;
       margin-top: 10px;
@@ -56,15 +75,20 @@
   </style>
 </head>
 <body>
-  <h1>Phase 1 – Read-Only Restricted Access</h1>
-  <p>This phase introduces the initiative and explains why we’re moving to cloud-based file sharing.</p>
-  <div class="viewer" id="cards-container"></div>
+  <header>FileShare and User Group Drive Migration Hub</header>
+
+  <div class="viewer" id="cards-container">
+    <h2>Viewer</h2>
+    <!-- Cards will load here -->
+  </div>
+
   <div class="nav-buttons">
-    <button id="prevBtn">Previous</button> <button id="nextBtn">Next</button>
+    <button id="prevBtn">Previous</button>
+    <button id="nextBtn">Next</button>
   </div>
-  <div class="progress" id="progress">
-    Loading...
-  </div>
+
+  <div class="progress" id="progress">Loading...</div>
+
   <script>
     // Load cards1.html into the container
     fetch('cards1.html')
@@ -73,9 +97,8 @@
         return response.text();
       })
       .then(data => {
-        document.getElementById('cards-container').innerHTML = data;
+        document.getElementById('cards-container').innerHTML += data;
 
-        // After loading, initialize card viewer logic
         const cards = document.querySelectorAll('.card');
         const progress = document.getElementById('progress');
         let currentIndex = 0;
