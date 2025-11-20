@@ -1,60 +1,43 @@
-<h1>Phase 1 – Card Viewer</h1>
+<!-- No <html>, <head>, or <body> tags because this is partial content -->
 <div id="cards">
   <div class="card active">
-    Card 1: Introduction to Phase 1
+    <h2>Card 1: Introduction to Phase 1</h2>
+    <p>This phase introduces the initiative and explains why we’re moving to cloud-based file sharing. It includes background information, objectives, and expected outcomes.</p>
   </div>
   <div class="card">
-    Card 2: Why Read-Only Access?
+    <h2>Card 2: Why Read-Only Access?</h2>
+    <p>Read-only access ensures data integrity and prevents unauthorized changes during the transition period. This approach minimizes risk and maintains compliance.</p>
   </div>
   <div class="card">
-    Card 3: Benefits of Restricted Access
+    <h2>Card 3: Benefits of Restricted Access</h2>
+    <p>Restricted access improves security, reduces accidental data loss, and ensures that only approved personnel can make changes to critical files.</p>
   </div>
   <div class="card">
-    Card 4: Security Enhancements
+    <h2>Card 4: Security Enhancements</h2>
+    <p>Enhanced security measures include encryption, multi-factor authentication, and strict permission controls to safeguard sensitive information.</p>
   </div>
   <div class="card">
-    Card 5: Compliance Requirements
+    <h2>Card 5: Compliance Requirements</h2>
+    <p>Compliance with government standards and policies is mandatory. This phase aligns with TBS directives and SSC security protocols.</p>
   </div>
   <div class="card">
-    Card 6: User Responsibilities
+    <h2>Card 6: User Responsibilities</h2>
+    <p>Users must follow guidelines for accessing files, report any issues promptly, and avoid attempts to bypass restrictions.</p>
   </div>
   <div class="card">
-    Card 7: Timeline Overview
+    <h2>Card 7: Timeline Overview</h2>
+    <p>The transition will occur in stages, starting with read-only access, followed by migration to cloud-based systems. Key milestones will be communicated regularly.</p>
   </div>
   <div class="card">
-    Card 8: Support Resources
+    <h2>Card 8: Support Resources</h2>
+    <p>Support is available through the IT Service Desk, online documentation, and training sessions. Contact details will be provided in the next steps.</p>
   </div>
   <div class="card">
-    Card 9: FAQs
+    <h2>Card 9: FAQs</h2>
+    <p>Common questions about access, security, and migration will be addressed in this section. Additional queries can be submitted to the support team.</p>
   </div>
   <div class="card">
-    Card 10: Next Steps
+    <h2>Card 10: Next Steps</h2>
+    <p>Prepare for the upcoming migration phase by reviewing guidelines, attending training, and ensuring compliance with security protocols.</p>
   </div>
 </div>
-<div class="nav-buttons">
-  <button id="prevBtn">Previous</button> <button id="nextBtn">Next</button>
-</div>
-<div class="progress" id="progress">
-  Card 1 of 10
-</div>
-<script>
-  const cards = document.querySelectorAll('.card');
-  const progress = document.getElementById('progress');
-  let currentIndex = 0;
-
-  function updateCard() {
-    cards.forEach(card => card.classList.remove('active'));
-    cards[currentIndex].classList.add('active');
-    progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
-  }
-
-  document.getElementById('nextBtn').addEventListener('click', () => {
-    currentIndex = (currentIndex + 1) % cards.length; // Loop forward
-    updateCard();
-  });
-
-  document.getElementById('prevBtn').addEventListener('click', () => {
-    currentIndex = (currentIndex - 1 + cards.length) % cards.length; // Loop backward
-    updateCard();
-  });
-</script>
