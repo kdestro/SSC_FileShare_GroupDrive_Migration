@@ -1,65 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phase 1 – Read-Only Restricted Access</title>
-       font-family: Aptos, Arial, sans-serif;
-      padding: 2em;
-      background-color: #add8e6; /* Light blue background */
-    }
-    h1 {
-      color: #00008B;
-      font-weight: bold;
-    }
-    p {
-      margin-bottom: 1.5em;
-    }
-    .viewer {
-      max-width: 800px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      padding: 20px;
-      cards */
-    }
-    .card.active {
-      display: block; /* Show only active card */
-    }
-    .nav-buttons {
-      text-align: center;
-      margin-top: 15px;
-    }
-    .nav-buttons button {
-      background-color: #00008B;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin: 0 10px;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .nav-buttons button:hover {
-      background-color: #27408b;
-    }
-    .progress {
-      text-align: center;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-  </style>
-</head>
-<body>
-  <h1>Phase 1 – Read-Only Restricted Access</h1>
-  <p>This phase introduces the initiative and explains why we’re moving to cloud-based file sharing.</p>
-
-  <!-- Card Viewer -->
-  <div class="viewer" id="cards-container"></div>
-
-  <script>
+font-family: Aptos, Arial, sans-serif; padding: 2em; background-color: #add8e6; /* Light blue background */ } h1 { color: #00008B; font-weight: bold; } p { margin-bottom: 1.5em; } .viewer { max-width: 800px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); padding: 20px; cards */ } .card.active { display: block; /* Show only active card */ } .nav-buttons { text-align: center; margin-top: 15px; } .nav-buttons button { background-color: #00008B; color: white; border: none; padding: 10px 20px; margin: 0 10px; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease; } .nav-buttons button:hover { background-color: #27408b; } .progress { text-align: center; margin-top: 10px; font-weight: bold; }
+<h1>Phase 1 – Read-Only Restricted Access</h1>
+<p>This phase introduces the initiative and explains why we’re moving to cloud-based file sharing.</p>
+<div class="viewer" id="cards-container"></div>
+<script>
     fetch('cards1.html')
       .then(response => response.text())
       .then(data => {
@@ -88,6 +31,4 @@
         updateCard(); // Show first card
       })
       .catch(error => console.error('Error loading cards:', error));
-  </script>
-</body>
-</html>
+</script>
