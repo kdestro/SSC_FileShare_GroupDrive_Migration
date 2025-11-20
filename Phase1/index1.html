@@ -4,14 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Phase 1 – Read-Only Restricted Access</title>
-  <style>
-    body {
-      font-family: Aptos, Arial, sans-serif;
+       font-family: Aptos, Arial, sans-serif;
       padding: 2em;
       background-color: #add8e6; /* Light blue background */
     }
     h1 {
-      #00008B;
+      color: #00008B;
       font-weight: bold;
     }
     p {
@@ -24,9 +22,14 @@
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       padding: 20px;
-      min-height: 300px; /* Enough space for large text */
-      overflow-y: auto;
-   : 15px;
+      cards */
+    }
+    .card.active {
+      display: block; /* Show only active card */
+    }
+    .nav-buttons {
+      text-align: center;
+      margin-top: 15px;
     }
     .nav-buttons button {
       background-color: #00008B;
@@ -55,13 +58,6 @@
 
   <!-- Card Viewer -->
   <div class="viewer" id="cards-container"></div>
-
-  <!-- Navigation -->
-  <div class="nav-buttons">
-    <button id="prevBtn">Previous</button>
-    <button id="nextBtn">Next</button>
-  </div>
-  <div class="progress" id="progress">Loading...</div>
 
   <script>
     fetch('cards1.html')
