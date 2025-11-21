@@ -7,114 +7,42 @@
   <style>
     body {
       font-family: Aptos, sans-serif;
-      margin: 0;
-      background-color: #d3d3d3; /* Grey background */
+      padding: 2em;
+      background-color: #f9f9f9; /* Light gray background */
     }
-
-    header {
-      background-color: #00008B; /* Dark blue */
-      color: white;
-      text-align: center;
-      padding: 20px;
-      font-size: 1.8em;
+    h1 {
+      color: #00008B; /* Dark blue heading */
       font-weight: bold;
     }
-
-    .viewer {
-      max-width: 800px;
-      margin: 30px auto;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      padding: 20px;
-      min-height: 300px;
-      overflow-y: auto;
-      text-align: center;
+    ul {
+      list-style-type: none;
+      padding: 0;
     }
-
-    .viewer h2 {
-      color: #4169E1; /* Royal blue */
-      margin-bottom: 20px;
+    li {
+      margin: 1em 0;
     }
-
-    .card {
-      display: none;
-      padding: 15px;
-      font-size: 1.1em;
-    }
-
-    .card.active {
-      display: block;
-    }
-
-    .nav-buttons {
-      text-align: center;
-      margin-top: 15px;
-    }
-
-    .nav-buttons button {
-      background-color: #00008B; /* Dark blue */
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin: 0 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .nav-buttons button:hover {
-      background-color: #27408b; /* Dark slate blue */
-    }
-
-    .progress {
-      text-align: center;
-      margin-top: 10px;
+    a {
+      text-decoration: none;
+      color: #4169e1; /* Royal blue links */
       font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <header>FileShare and User Group Drive Migration Hub</header>
-
-  <div class="viewer" id="cards-container">
-    <h2>Phase 3 – Shared Drive Cleanup and Migration</h2>
-    <!-- Cards will load here -->
-  </div>
-
-  <script>
-    // Load cards3.html into the container
-    fetch('cards3.html')
-      .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.text();
-      })
-      .then(data => {
-        document.getElementById('cards-container').innerHTML += data;
-
-        const cards = document.querySelectorAll('.card');
-        const progress = document.getElementById('progress');
-        let currentIndex = 0;
-
-        function updateCard() {
-          cards.forEach(card => card.classList.remove('active'));
-          cards[currentIndex].classList.add('active');
-          progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
-        }
-
-        document.getElementById('nextBtn').addEventListener('click', () => {
-          currentIndex = (currentIndex + 1) % cards.length;
-          updateCard();
-        });
-
-        document.getElementById('prevBtn').addEventListener('click', () => {
-          currentIndex = (currentIndex - 1 + cards.length) % cards.length;
-          updateCard();
-        });
-
-        updateCard(); // Show first card
-      })
-      .catch(error => console.error('Error loading cards:', error));
-  </script>
+  <h1>FileShare and User Group Drive Migration Hub</h1>
+  <ul>
+    <li>
+      <a href="Phase1/index1.html">Go to Phase 1 – Read-Only Restricted Access</a>
+    </li>
+    <li>
+      <a href="Phase2/index2.html">Go to Phase 2 – Personal Drive Migration</a>
+    </li>
+    <li>
+      <a href="Phase3/index3.html">Go to Phase 3 – Shared Drive Cleanup and Migration</a>
+    </li>
+  </ul>
 </body>
 </html>
