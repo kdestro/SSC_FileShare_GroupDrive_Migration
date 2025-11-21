@@ -8,11 +8,8 @@
     body {
       font-family: Aptos, sans-serif;
       margin: 0;
-      background-color: #d3d3d3; /* Grey background */
-    }
-
-    header {
-      background-color: #00008B; /* Dark blue */
+      background-color: #d3d3d3;
+   B;
       color: white;
       text-align: center;
       padding: 20px;
@@ -33,14 +30,13 @@
     }
 
     .viewer h2 {
-      color: #4169E1; /* Royal blue */
+      color: #4169E1;
       margin-bottom: 20px;
     }
 
     .card {
       display: none;
-      padding: 15px;
-      font-size: 1.1em;
+           font-size: 1.1em;
     }
 
     .card.active {
@@ -53,7 +49,7 @@
     }
 
     .nav-buttons button {
-      background-color: #00008B; /* Dark blue */
+      background-color: #00008B;
       color: white;
       border: none;
       padding: 10px 20px;
@@ -64,7 +60,7 @@
     }
 
     .nav-buttons button:hover {
-      background-color: #27408b; /* Dark slate blue */
+      background-color: #27408b;
     }
 
     .progress {
@@ -82,36 +78,28 @@
     <!-- cards1.html fragment will be injected below -->
   </div>
 
-  <!-- Robust loader: fetch -> safely insert -> scoped selectors -> attach handlers -->
   <script>
   (async () => {
     const container = document.getElementById('cards-container');
 
     try {
-      // IMPORTANT: cards1.html must be in the same folder as index1.html
       const response = await fetch('cards1.html', { cache: 'no-store' });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const html = await response.text();
 
-      // Parse into a temporary node to avoid innerHTML nesting quirks
       const temp = document.createElement('div');
       temp.innerHTML = html.trim();
-
-      // Move parsed children into the real container (preserves events & structure)
       while (temp.firstChild) {
         container.appendChild(temp.firstChild);
       }
 
-      // Scope all queries to the container (prevents collisions across phases)
-      const cards   = container.querySelectorAll('.card');
+      const cards = container.querySelectorAll('.card');
       const progress = container.querySelector('#progress');
-      const nextBtn  = container.querySelector('#nextBtn');
-      const prevBtn  = container.querySelector('#prevBtn');
+      const nextBtn = container.querySelector('#nextBtn');
+      const prevBtn = container.querySelector('#prevBtn');
 
-      if (!cards.length) throw new Error('No .card elements found after insert.');
-      if (!nextBtn || !prevBtn || !progress) {
-        throw new Error('Missing controls (#nextBtn, #prevBtn, #progress) in cards1.html.');
-      }
+      if (!cards.length) throw new Error('No .card elements found.');
+      if (!nextBtn || !prevBtn || !progress) throw new Error('Missing navigation controls.');
 
       let currentIndex = 0;
 
@@ -131,14 +119,10 @@
         updateCard();
       });
 
-      // Show first card
       updateCard();
     } catch (err) {
       console.error('Error loading cards1.html:', err);
-      container.insertAdjacentHTML(
-        'beforeend',
-        `<p style="color:#b00020;">Could not load cards. ${String(err)}</p>`
-      );
+      container.insertAdjacentHTML('beforeend', `<p style="color:red;">Could not load cards. ${String(err)}</p>`);
     }
   })();
   </script>
