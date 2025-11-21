@@ -28,12 +28,9 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       padding: 20px;
       min-height: 300px;
-      overflow-y: auto;
-      text-align: center;
+      overflow      color: #4169E1; /* Royal blue */
+      margin-bottom: 20px;
     }
-
-    .viewer h2 {
-      color: }
 
     .card {
       display: none;
@@ -77,47 +74,84 @@
 
   <div class="viewer" id="cards-container">
     <h2>Phase 1 – Read-Only Restricted Access</h2>
-    <!-- Cards will load here -->
+
+    <!-- Cards start here -->
+    <div class="card active">
+      <h2>Card 1: Introduction to Phase 1</h2>
+      <p>This phase introduces the initiative and explains why we’re moving to cloud-based file sharing. It includes background information, objectives, and expected outcomes.</p>
+    </div>
+    <div class="card">
+      <h2>Card 2: Why Read-Only Access?</h2>
+      <p>Read-only access ensures data integrity and prevents unauthorized changes during the transition period. This approach minimizes risk and maintains compliance.</p>
+    </div>
+    <div class="card">
+      <h2>Card 3: Benefits of Restricted Access</h2>
+      <p>Restricted access improves security, reduces accidental data loss, and ensures that only approved personnel can make changes to critical files.</p>
+    </div>
+    <div class="card">
+      <h2>Card 4: Security Enhancements</h2>
+      <p>Enhanced security measures include encryption, multi-factor authentication, and strict permission controls to safeguard sensitive information.</p>
+    </div>
+    <div class="card">
+      <h2>Card 5: Compliance Requirements</h2>
+      <p>Compliance with government standards and policies is mandatory. This phase aligns with TBS directives and SSC security protocols.</p>
+    </div>
+    <div class="card">
+      <h2>Card 6: User Responsibilities</h2>
+      <p>Users must follow guidelines for accessing files, report any issues promptly, and avoid attempts to bypass restrictions.</p>
+    </div>
+    <div class="card">
+      <h2>Card 7: Timeline Overview</h2>
+      <p>The transition will occur in stages, starting with read-only access, followed by migration to cloud-based systems. Key milestones will be communicated regularly.</p>
+    </div>
+    <div class="card">
+      <h2>Card 8: Support Resources</h2>
+      <p>Support is available through the IT Service Desk, online documentation, and training sessions. Contact details will be provided in the next steps.</p>
+    </div>
+    <div class="card">
+      <h2>Card 9: FAQs</h2>
+      <p>Common questions about access, security, and migration will be addressed in this section. Additional queries can be submitted to the support team.</p>
+    </div>
+    <div class="card">
+      <h2>Card 10: Next Steps</h2>
+      <p>Prepare for the upcoming migration phase by reviewing guidelines, attending training, and ensuring compliance with security protocols.</p>
+    </div>
+    <!-- Cards end here -->
+
+    <div class="nav-buttons">
+      <button id="prevBtn">Previous</button>
+      <button id="nextBtn">Next</button>
+    </div>
+    <div class="progress" id="progress">
+      Card 1 of 10
+    </div>
   </div>
 
   <script>
-    // Load cards1.html from SharePoint absolute URL
-    fetch('https://gcxgce.sharepoint.com/:u:/t/10003109/IQB3PC7GxAupS43hDxeqPxM-AQG9SihiMXWjxcVZjyTQEeI?download=1')
-      .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.text();
-      })
-      .then(data => {
-        // Insert the fetched HTML into the container
-        document.getElementById('cards-container').insertAdjacentHTML('beforeend', data);
+    const cards = document.querySelectorAll('.card');
+    const progress = document.getElementById('progress');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
 
-        // Select elements AFTER content is loaded
-        const cards = document.querySelectorAll('.card');
-        const progress = document.getElementById('progress');
-        const nextBtn = document.getElementById('nextBtn');
-        const prevBtn = document.getElementById('prevBtn');
+    let currentIndex = 0;
 
-        let currentIndex = 0;
+    function updateCard() {
+      cards.forEach(card => card.classList.remove('active'));
+      cards[currentIndex].classList.add('active');
+      progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
+    }
 
-        function updateCard() {
-          cards.forEach(card => card.classList.remove('active'));
-          cards[currentIndex].classList.add('active');
-          progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
-        }
+    nextBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % cards.length;
+      updateCard();
+    });
 
-        nextBtn.addEventListener('click', () => {
-          currentIndex = (currentIndex + 1) % cards.length;
-          updateCard();
-        });
+    prevBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+      updateCard();
+    });
 
-        prevBtn.addEventListener('click', () => {
-          currentIndex = (currentIndex - 1 + cards.length) % cards.length;
-          updateCard();
-        });
-
-        updateCard(); // Show first card
-      })
-      .catch(error => console.error('Error loading cards:', error));
+    updateCard(); // Show first card
   </script>
 </body>
 </html>
