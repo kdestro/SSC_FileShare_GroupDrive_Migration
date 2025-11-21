@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FileShare and User Group Drive Migration Hub</title>
   <style>
     body {
       font-family: Aptos, sans-serif;
       margin: 0;
-      background-color: #d3d3d3;
-   B;
+      background-color: #d3d3d3; /* Grey background */
+    }
+
+    header {
+      background-color: #00008B; /* Dark blue */
       color: white;
       text-align: center;
       padding: 20px;
@@ -30,13 +33,14 @@
     }
 
     .viewer h2 {
-      color: #4169E1;
+      color: #4169E1; /* Royal blue */
       margin-bottom: 20px;
     }
 
     .card {
       display: none;
-           font-size: 1.1em;
+      padding: 15px;
+      font-size: 1.1em;
     }
 
     .card.active {
@@ -49,7 +53,7 @@
     }
 
     .nav-buttons button {
-      background-color: #00008B;
+      background-color: #00008B; /* Dark blue */
       color: white;
       border: none;
       padding: 10px 20px;
@@ -60,7 +64,7 @@
     }
 
     .nav-buttons button:hover {
-      background-color: #27408b;
+      background-color: #27408b; /* Dark slate blue */
     }
 
     .progress {
@@ -75,56 +79,42 @@
 
   <div class="viewer" id="cards-container">
     <h2>Phase 1 – Read-Only Restricted Access</h2>
-    <!-- cards1.html fragment will be injected below -->
+    <!-- Cards will load here -->
   </div>
 
   <script>
-  (async () => {
-    const container = document.getElementById('cards-container');
+    // Load cards1.html into the container
+    fetch('cards1.html')
+      .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.text();
+      })
+      .then(data => {
+        document.getElementById('cards-container').innerHTML += data;
 
-    try {
-      const response = await fetch('cards1.html', { cache: 'no-store' });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const html = await response.text();
+        const cards = document.querySelectorAll('.card');
+        const progress = document.getElementById('progress');
+        let currentIndex = 0;
 
-      const temp = document.createElement('div');
-      temp.innerHTML = html.trim();
-      while (temp.firstChild) {
-        container.appendChild(temp.firstChild);
-      }
+        function updateCard() {
+          cards.forEach(card => card.classList.remove('active'));
+          cards[currentIndex].classList.add('active');
+          progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
+        }
 
-      const cards = container.querySelectorAll('.card');
-      const progress = container.querySelector('#progress');
-      const nextBtn = container.querySelector('#nextBtn');
-      const prevBtn = container.querySelector('#prevBtn');
+        document.getElementById('nextBtn').addEventListener('click', () => {
+          currentIndex = (currentIndex + 1) % cards.length;
+          updateCard();
+        });
 
-      if (!cards.length) throw new Error('No .card elements found.');
-      if (!nextBtn || !prevBtn || !progress) throw new Error('Missing navigation controls.');
+        document.getElementById('prevBtn').addEventListener('click', () => {
+          currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+          updateCard();
+        });
 
-      let currentIndex = 0;
-
-      function updateCard() {
-        cards.forEach(c => c.classList.remove('active'));
-        cards[currentIndex].classList.add('active');
-        progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
-      }
-
-      nextBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % cards.length;
-        updateCard();
-      });
-
-      prevBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex - 1 + cards.length) % cards.length;
-        updateCard();
-      });
-
-      updateCard();
-    } catch (err) {
-      console.error('Error loading cards1.html:', err);
-      container.insertAdjacentHTML('beforeend', `<p style="color:red;">Could not load cards. ${String(err)}</p>`);
-    }
-  })();
+        updateCard(); // Show first card
+      })
+      .catch(error => console.error('Error loading cards:', error));
   </script>
 </body>
 </html>
