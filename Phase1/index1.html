@@ -32,8 +32,8 @@
       text-align: center;
     }
 
-    margin-bottom: 20px;
-    }
+    .viewer h2 {
+      color: }
 
     .card {
       display: none;
@@ -81,14 +81,14 @@
   </div>
 
   <script>
-    // Load cards1.html into the container
-    fetch('cards1.html')
+    // Load cards1.html from SharePoint absolute URL
+    fetch('https://gcxgce.sharepoint.com/:u:/t/10003109/IQB3PC7GxAupS43hDxeqPxM-AQG9SihiMXWjxcVZjyTQEeI?download=1')
       .then(response => {
         if (!response.ok) throw new Error('Network response was not ok');
         return response.text();
       })
       .then(data => {
-        // Insert the fetched HTML properly
+        // Insert the fetched HTML into the container
         document.getElementById('cards-container').insertAdjacentHTML('beforeend', data);
 
         // Select elements AFTER content is loaded
