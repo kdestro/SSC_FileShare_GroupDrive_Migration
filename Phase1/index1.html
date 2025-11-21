@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FileShare and User Group Drive Migration Hub</title>
   <style>
-    body {
-      font-family: Aptos, sans-serif;
-      margin: 0;
-      background-color: #d3d3d3; /* Grey background */
+    background-color: #d3d3d3; /* Grey background */
     }
 
     header {
@@ -28,7 +25,11 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       padding: 20px;
       min-height: 300px;
-      overflow      color: #4169E1; /* Royal blue */
+     ;
+    }
+
+    .viewer h2 {
+      color: #4169E1; /* Royal blue */
       margin-bottom: 20px;
     }
 
@@ -128,30 +129,32 @@
   </div>
 
   <script>
-    const cards = document.querySelectorAll('.card');
-    const progress = document.getElementById('progress');
-    const nextBtn = document.getElementById('nextBtn');
-    const prevBtn = document.getElementById('prevBtn');
+    document.addEventListener('DOMContentLoaded', () => {
+      const cards = document.querySelectorAll('.card');
+      const progress = document.getElementById('progress');
+      const nextBtn = document.getElementById('nextBtn');
+      const prevBtn = document.getElementById('prevBtn');
 
-    let currentIndex = 0;
+      let currentIndex = 0;
 
-    function updateCard() {
-      cards.forEach(card => card.classList.remove('active'));
-      cards[currentIndex].classList.add('active');
-      progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
-    }
+      function updateCard() {
+        cards.forEach(card => card.classList.remove('active'));
+        cards[currentIndex].classList.add('active');
+        progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
+      }
 
-    nextBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % cards.length;
+      nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % cards.length;
+        updateCard();
+      });
+
+      prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+        updateCard();
+      });
+
       updateCard();
     });
-
-    prevBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + cards.length) % cards.length;
-      updateCard();
-    });
-
-    updateCard(); // Show first card
   </script>
 </body>
 </html>
