@@ -32,9 +32,7 @@
       text-align: center;
     }
 
-    .viewer h2 {
-      color: #4169E1; /* Royal blue */
-      margin-bottom: 20px;
+    margin-bottom: 20px;
     }
 
     .card {
@@ -90,10 +88,15 @@
         return response.text();
       })
       .then(data => {
-        document.getElementById('cards-container').innerHTML += data;
+        // Insert the fetched HTML properly
+        document.getElementById('cards-container').insertAdjacentHTML('beforeend', data);
 
+        // Select elements AFTER content is loaded
         const cards = document.querySelectorAll('.card');
         const progress = document.getElementById('progress');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+
         let currentIndex = 0;
 
         function updateCard() {
@@ -102,12 +105,12 @@
           progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
         }
 
-        document.getElementById('nextBtn').addEventListener('click', () => {
+        nextBtn.addEventListener('click', () => {
           currentIndex = (currentIndex + 1) % cards.length;
           updateCard();
         });
 
-        document.getElementById('prevBtn').addEventListener('click', () => {
+        prevBtn.addEventListener('click', () => {
           currentIndex = (currentIndex - 1 + cards.length) % cards.length;
           updateCard();
         });
