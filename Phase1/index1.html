@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FileShare and User Group Drive Migration Hub</title>
   <style>
     body {
@@ -79,42 +79,68 @@
 
   <div class="viewer" id="cards-container">
     <h2>Phase 1 – Read-Only Restricted Access</h2>
-    <!-- Cards will load here -->
+    <!-- cards1.html fragment will be injected below -->
   </div>
 
+  <!-- Robust loader: fetch -> safely insert -> scoped selectors -> attach handlers -->
   <script>
-    // Load cards1.html into the container
-    fetch('cards1.html')
-      .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.text();
-      })
-      .then(data => {
-        document.getElementById('cards-container').innerHTML += data;
+  (async () => {
+    const container = document.getElementById('cards-container');
 
-        const cards = document.querySelectorAll('.card');
-        const progress = document.getElementById('progress');
-        let currentIndex = 0;
+    try {
+      // IMPORTANT: cards1.html must be in the same folder as index1.html
+      const response = await fetch('cards1.html', { cache: 'no-store' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const html = await response.text();
 
-        function updateCard() {
-          cards.forEach(card => card.classList.remove('active'));
-          cards[currentIndex].classList.add('active');
-          progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
-        }
+      // Parse into a temporary node to avoid innerHTML nesting quirks
+      const temp = document.createElement('div');
+      temp.innerHTML = html.trim();
 
-        document.getElementById('nextBtn').addEventListener('click', () => {
-          currentIndex = (currentIndex + 1) % cards.length;
-          updateCard();
-        });
+      // Move parsed children into the real container (preserves events & structure)
+      while (temp.firstChild) {
+        container.appendChild(temp.firstChild);
+      }
 
-        document.getElementById('prevBtn').addEventListener('click', () => {
-          currentIndex = (currentIndex - 1 + cards.length) % cards.length;
-          updateCard();
-        });
+      // Scope all queries to the container (prevents collisions across phases)
+      const cards   = container.querySelectorAll('.card');
+      const progress = container.querySelector('#progress');
+      const nextBtn  = container.querySelector('#nextBtn');
+      const prevBtn  = container.querySelector('#prevBtn');
 
-        updateCard(); // Show first card
-      })
-      .catch(error => console.error('Error loading cards:', error));
+      if (!cards.length) throw new Error('No .card elements found after insert.');
+      if (!nextBtn || !prevBtn || !progress) {
+        throw new Error('Missing controls (#nextBtn, #prevBtn, #progress) in cards1.html.');
+      }
+
+      let currentIndex = 0;
+
+      function updateCard() {
+        cards.forEach(c => c.classList.remove('active'));
+        cards[currentIndex].classList.add('active');
+        progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
+      }
+
+      nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % cards.length;
+        updateCard();
+      });
+
+      prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+        updateCard();
+      });
+
+      // Show first card
+      updateCard();
+    } catch (err) {
+      console.error('Error loading cards1.html:', err);
+      container.insertAdjacentHTML(
+        'beforeend',
+        `<p style="color:#b00020;">Could not load cards. ${String(err)}</p>`
+      );
+    }
+  })();
   </script>
 </body>
 </html>
