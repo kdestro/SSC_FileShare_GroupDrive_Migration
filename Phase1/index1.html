@@ -57,6 +57,20 @@
   #c9:checked ~ .cards .card:nth-child(9),
   #c10:checked ~ .cards .card:nth-child(10) { display: block; }
 
+  /* Navigation buttons */
+  .nav { display: none; justify-content: center; gap: 12px; margin-top: 16px; }
+  .nav label {
+    background-color: #00008B; /* Dark blue */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+  }
+  .nav label:hover { background-color: #27408b; }
+
   /* Show only the nav block that matches the checked radio */
   #c1:checked ~ .nav.s1,
   #c2:checked ~ .nav.s2,
@@ -157,6 +171,48 @@
         <h2>Card 10: Next Steps</h2>
         <p>Prepare for the upcoming migration phase by reviewing guidelines, attending training, and ensuring compliance with security protocols.</p>
       </div>
+    </div>
+
+    <!-- Prev/Next (per-card nav shown via CSS) -->
+    <div class="nav s1" aria-label="Navigation for card 1">
+      <label for="c10" aria-label="Previous">Previous</label>
+      <label for="c2" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s2" aria-label="Navigation for card 2">
+      <label for="c1" aria-label="Previous">Previous</label>
+      <label for="c3" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s3" aria-label="Navigation for card 3">
+      <label for="c2" aria-label="Previous">Previous</label>
+      <label for="c4" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s4" aria-label="Navigation for card 4">
+      <label for="c3" aria-label="Previous">Previous</label>
+      <label for="c5" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s5" aria-label="Navigation for card 5">
+      <label for="c4" aria-label="Previous">Previous</label>
+      <label for="c6" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s6" aria-label="Navigation for card 6">
+      <label for="c5" aria-label="Previous">Previous</label>
+      <label for="c7" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s7" aria-label="Navigation for card 7">
+      <label for="c6" aria-label="Previous">Previous</label>
+      <label for="c8" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s8" aria-label="Navigation for card 8">
+      <label for="c7" aria-label="Previous">Previous</label>
+      <label for="c9" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s9" aria-label="Navigation for card 9">
+      <label for="c8" aria-label="Previous">Previous</label>
+      <label for="c10" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s10" aria-label="Navigation for card 10">
+      <label for="c9" aria-label="Previous">Previous</label>
+      <label for="c1" aria-label="Next">Next</label>
     </div>
 
     <!-- Progress -->
