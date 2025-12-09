@@ -6,19 +6,38 @@
 <title>FileShare and User Group Drive Migration Hub</title>
 <style>
   /* Base */
-  body {
-    font-family: Aptos, Segoe UI, Arial, sans-serif;
-    margin: 0;
-    background-color: #d3d3d3; /* Grey background */
+  :root {
+    --blue-dark: #00008B;
+    --blue-royal: #4169E1;
+    --blue-hover: #27408b;
+    --bg-grey: #d3d3d3;
+    --label-bg: #e9eefc;
+    --label-border: #cbd6ff;
+    --label-bg-hover: #dbe5ff;
+    --focus-ring: #ffbf47; /* accessible amber */
   }
+  html { box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: inherit; }
+
+  body {
+    font-family: Aptos, Segoe UI, system-ui, Arial, sans-serif;
+    margin: 0;
+    background-color: var(--bg-grey);
+    line-height: 1.5;
+  }
+
   header {
-    background-color: #00008B; /* Dark blue */
+    background-color: var(--blue-dark);
     color: white;
     text-align: center;
     padding: 20px;
+  }
+  header h1 {
+    margin: 0;
     font-size: 1.8em;
     font-weight: bold;
   }
+
   .viewer {
     max-width: 800px;
     margin: 30px auto;
@@ -28,14 +47,14 @@
     padding: 20px;
     min-height: 300px;
     overflow-y: auto;
-    text-align: center;
   }
   .viewer h2 {
-    color: #4169E1; /* Royal blue */
+    color: var(--blue-royal);
     margin-bottom: 20px;
+    font-size: 1.4em;
   }
 
-  /* Hide the radios controlling state */
+  /* Hide the radios controlling state (keep accessible via labels) */
   input[type="radio"][name="cards"] {
     position: absolute;
     left: -9999px;
@@ -43,7 +62,12 @@
   }
 
   /* Cards default hidden */
-  .cards .card { display: none; padding: 15px; font-size: 1.1em; text-align: left; }
+  .cards .card {
+    display: none;
+    padding: 15px;
+    font-size: 1.05em;
+    text-align: left;
+  }
 
   /* Show the card matching the checked radio */
   #c1:checked ~ .cards .card:nth-child(1),
@@ -55,12 +79,60 @@
   #c7:checked ~ .cards .card:nth-child(7),
   #c8:checked ~ .cards .card:nth-child(8),
   #c9:checked ~ .cards .card:nth-child(9),
-  #c10:checked ~ .cards .card:nth-child(10) { display: block; }
+  #c10:checked ~ .cards .card:nth-child(10) {
+    display: block;
+  }
 
-  /* Navigation buttons */
+  /* Progress text (single aria-live) */
+  .progress {
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  .progress p { display: none; margin: 0; }
+  #c1:checked ~ .progress .p1,
+  #c2:checked ~ .progress .p2,
+  #c3:checked ~ .progress .p3,
+  #c4:checked ~ .progress .p4,
+  #c5:checked ~ .progress .p5,
+  #c6:checked ~ .progress .p6,
+  #c7:checked ~ .progress .p7,
+  #c8:checked ~ .progress .p8,
+  #c9:checked ~ .progress .p9,
+  #c10:checked ~ .progress .p10 {
+    display: block;
+  }
+
+  /* Quick-jump */
+  .quickjump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  .quickjump label {
+    background: var(--label-bg);
+    color: var(--blue-dark);
+    border: 1px solid var(--label-border);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .quickjump label:hover { background: var(--label-bg-hover); }
+
+  /* Focus visibility for keyboard users */
+  .quickjump label:focus-visible,
+  .nav label:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Optional previous/next nav */
   .nav { display: none; justify-content: center; gap: 12px; margin-top: 16px; }
   .nav label {
-    background-color: #00008B; /* Dark blue */
+    background-color: var(--blue-dark);
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -69,7 +141,7 @@
     font-size: 16px;
     user-select: none;
   }
-  .nav label:hover { background-color: #27408b; }
+  .nav label:hover { background-color: var(--blue-hover); }
 
   /* Show only the nav block that matches the checked radio */
   #c1:checked ~ .nav.s1,
@@ -82,124 +154,145 @@
   #c8:checked ~ .nav.s8,
   #c9:checked ~ .nav.s9,
   #c10:checked ~ .nav.s10 { display: flex; }
-
-  /* Progress text */
-  .progress { text-align: center; margin-top: 10px; font-weight: bold; }
-  .progress p { display: none; margin: 0; }
-  #c1:checked ~ .progress .p1,
-  #c2:checked ~ .progress .p2,
-  #c3:checked ~ .progress .p3,
-  #c4:checked ~ .progress .p4,
-  #c5:checked ~ .progress .p5,
-  #c6:checked ~ .progress .p6,
-  #c7:checked ~ .progress .p7,
-  #c8:checked ~ .progress .p8,
-  #c9:checked ~ .progress .p9,
-  #c10:checked ~ .progress .p10 { display: block; }
-
-  /* Optional: numbered quick-jump */
-  .quickjump { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 12px; }
-  .quickjump label {
-    background: #e9eefc;
-    color: #00008B;
-    border: 1px solid #cbd6ff;
-    padding: 6px 10px;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .quickjump label:hover { background: #dbe5ff; }
 </style>
 </head>
 <body>
-  <header>FileShare and User Group Drive Migration Hub</header>
+  <header>
+    <h1>FileShare and User Group Drive Migration Hub</h1>
+  </header>
 
   <div class="viewer">
-    <!-- State (no JS): radios determine which card is visible -->
-    <input type="radio" name="cards" id="c1" checked>
-    <input type="radio" name="cards" id="c2">
-    <input type="radio" name="cards" id="c3">
-    <input type="radio" name="cards" id="c4">
-    <input type="radio" name="cards" id="c5">
-    <input type="radio" name="cards" id="c6">
-    <input type="radio" name="cards" id="c7">
-    <input type="radio" name="cards" id="c8">
-    <input type="radio" name="cards" id="c9">
-    <input type="radio" name="cards" id="c10">
-
     <h2>Phase 2 – Personal Drive Migration</h2>
 
-    <!-- Cards -->
-    <div class="cards" aria-live="polite">
-      <div class="card">
-        <h2>Card 1: Introduction to Phase 1</h2>
-        <p>This phase introduces the initiative and explains why we’re moving to cloud-based file sharing. It includes background information, objectives, and expected outcomes.</p>
-      </div>
-      <div class="card">
-        <h2>Card 2: Why Read-Only Access?</h2>
-        <p>Read-only access ensures data integrity and prevents unauthorized changes during the transition period. This approach minimizes risk and maintains compliance.</p>
-      </div>
-      <div class="card">
-        <h2>Card 3: Benefits of Restricted Access</h2>
-        <p>Restricted access improves security, reduces accidental data loss, and ensures that only approved personnel can make changes to critical files.</p>
-      </div>
-      <div class="card">
-        <h2>Card 4: Security Enhancements</h2>
-        <p>Enhanced security measures include encryption, multi-factor authentication, and strict permission controls to safeguard sensitive information.</p>
-      </div>
-      <div class="card">
-        <h2>Card 5: Compliance Requirements</h2>
-        <p>Compliance with government standards and policies is mandatory. This phase aligns with TBS directives and SSC security protocols.</p>
-      </div>
-      <div class="card">
-        <h2>Card 6: User Responsibilities</h2>
-        <p>Users must follow guidelines for accessing files, report any issues promptly, and avoid attempts to bypass restrictions.</p>
-      </div>
-      <div class="card">
-        <h2>Card 7: Timeline Overview</h2>
-        <p>The transition will occur in stages, starting with read-only access, followed by migration to cloud-based systems. Key milestones will be communicated regularly.</p>
-      </div>
-      <div class="card">
-        <h2>Card 8: Support Resources</h2>
-        <p>Support is available through the IT Service Desk, online documentation, and training sessions. Contact details will be provided in the next steps.</p>
-      </div>
-      <div class="card">
-        <h2>Card 9: FAQs</h2>
-        <p>Common questions about access, security, and migration will be addressed in this section. Additional queries can be submitted to the support team.</p>
-      </div>
-      <div class="card">
-        <h2>Card 10: Next Steps</h2>
-        <p>Prepare for the upcoming migration phase by reviewing guidelines, attending training, and ensuring compliance with security protocols.</p>
-      </div>
-    </div>
+    <!-- Group radios in a form/fieldset for accessibility -->
+    <form>
+      <fieldset role="radiogroup" aria-label="Cards navigation">
+        <!-- State (no JS): radios determine which card is visible -->
+        <input type="radio" name="cards" id="c1" checked>
+        <input type="radio" name="cards" id="c2">
+        <input type="radio" name="cards" id="c3">
+        <input type="radio" name="cards" id="c4">
+        <input type="radio" name="cards" id="c5">
+        <input type="radio" name="cards" id="c6">
+        <input type="radio" name="cards" id="c7">
+        <input type="radio" name="cards" id="c8">
+        <input type="radio" name="cards" id="c9">
+        <input type="radio" name="cards" id="c10">
 
-    <!-- Progress -->
-    <div class="progress" aria-live="polite">
-      <p class="p1">Card 1 of 10</p>
-      <p class="p2">Card 2 of 10</p>
-      <p class="p3">Card 3 of 10</p>
-      <p class="p4">Card 4 of 10</p>
-      <p class="p5">Card 5 of 10</p>
-      <p class="p6">Card 6 of 10</p>
-      <p class="p7">Card 7 of 10</p>
-      <p class="p8">Card 8 of 10</p>
-      <p class="p9">Card 9 of 10</p>
-      <p class="p10">Card 10 of 10</p>
-    </div>
+        <!-- Optional: numbered quick-jump -->
+        <div class="quickjump" aria-label="Jump to card">
+          <label for="c1" title="Card 1">1</label>
+          <label for="c2" title="Card 2">2</label>
+          <label for="c3" title="Card 3">3</label>
+          <label for="c4" title="Card 4">4</label>
+          <label for="c5" title="Card 5">5</label>
+          <label for="c6" title="Card 6">6</label>
+          <label for="c7" title="Card 7">7</label>
+          <label for="c8" title="Card 8">8</label>
+          <label for="c9" title="Card 9">9</label>
+          <label for="c10" title="Card 10">10</label>
+        </div>
 
-    <!-- Optional: numbered quick-jump -->
-    <div class="quickjump" aria-label="Jump to card">
-      <label for="c1" title="Card 1">1</label>
-      <label for="c2" title="Card 2">2</label>
-      <label for="c3" title="Card 3">3</label>
-      <label for="c4" title="Card 4">4</label>
-      <label for="c5" title="Card 5">5</label>
-      <label for="c6" title="Card 6">6</label>
-      <label for="c7" title="Card 7">7</label>
-      <label for="c8" title="Card 8">8</label>
-      <label for="c9" title="Card 9">9</label>
-      <label for="c10" title="Card 10">10</label>
-    </div>
+        <!-- Cards -->
+        <div class="cards">
+          <div class="card" role="region" aria-labelledby="card1-title">
+            <h3 id="card1-title">Card 1: Introduction to Phase 2</h3>
+            <p>This phase introduces the initiative and explains why we’re moving to cloud-based file sharing. It includes background information, objectives, and expected outcomes.</p>
+          </div>
+          <div class="card" role="region" aria-labelledby="card2-title">
+            <h3 id="card2-title">Card 2: Why Read-Only Access?</h3>
+            <p>Read-only access ensures data integrity and prevents unauthorized changes during the transition period. This approach minimizes risk and maintains compliance.</p>
+          </div>
+          <div class="card" role="region" aria-labelledby="card3-title">
+            <h3 id="card3-title">Card 3: Benefits of Restricted Access</h3>
+            <p>Restricted access improves security, reduces accidental data loss, and ensures that only approved personnel can make changes to critical files.</p>
+          </div>
+          <div class="card" role="region" aria-labelledby="card4-title">
+            <h3 id="card4-title">Card 4: Security Enhancements</h3>
+            <p>Enhanced security measures include encryption, multi-factor authentication, and strict permission controls to safeguard sensitive information.</p>
+          </div>
+          <div class="card" role="region" aria-labelledby="card5-title">
+            <h3 id="card5-title">Card 5: Compliance Requirements</h3>
+            <p>Compliance with government standards and policies is mandatory. This phase aligns with TBS directives and SSC security protocols.</p>
+          </div>
+          <div class="card" role="region" aria-labelledby="card6-title">
+            <h3 id="card6-title">Card 6: User Responsibilities</h3>
+            <p>Users must follow guidelines for accessing files, report any issues promptly, and avoid attempts to bypass restrictions.</p>
+          </div>
+          <div class="card" role="region" aria-labelledby="card7-title">
+            <h3 id="card7-title">Card 7: Timeline Overview</h3>
+            <p>The transition will occur in stages, starting with read-only access, followed by migration to cloud-based systems. Key milestones will be communicated regularly.</p>
+          </div>
+          <div class="card" role="region" aria-labelledby="card8-title">
+            <h3 id="card8-title">Card 8: Support Resources</h3>
+            <p>Support is available through the IT Service Desk, online documentation, and training sessions. Contact details will be provided in the next steps.</p>
+          </div>
+          <div class="card" role="region" aria-labelledby="card9-title">
+            <h3 id="card9-title">Card 9: FAQs</h3>
+            <p>Common questions about access, security, and migration will be addressed in this section. Additional queries can be submitted to the support team.</p>
+          </div>
+          <div class="card" role="region" aria-labelledby="card10-title">
+            <h3 id="card10-title">Card 10: Next Steps</h3>
+            <p>Prepare for the upcoming migration phase by reviewing guidelines, attending training, and ensuring compliance with security protocols.</p>
+          </div>
+        </div>
+
+        <!-- Progress (single aria-live) -->
+        <div class="progress" aria-live="polite">
+          <p class="p1">Card 1 of 10</p>
+          <p class="p2">Card 2 of 10</p>
+          <p class="p3">Card 3 of 10</p>
+          <p class="p4">Card 4 of 10</p>
+          <p class="p5">Card 5 of 10</p>
+          <p class="p6">Card 6 of 10</p>
+          <p class="p7">Card 7 of 10</p>
+          <p class="p8">Card 8 of 10</p>
+          <p class="p9">Card 9 of 10</p>
+          <p class="p10">Card 10 of 10</p>
+        </div>
+
+        <!-- Optional previous/next navigation (works with labels) -->
+        <div class="nav s1" aria-label="Navigation for card 1">
+          <label for="c2">Next</label>
+        </div>
+        <div class="nav s2" aria-label="Navigation for card 2">
+          <label for="c1">Previous</label>
+          <label for="c3">Next</label>
+        </div>
+        <div class="nav s3" aria-label="Navigation for card 3">
+          <label for="c2">Previous</label>
+          <label for="c4">Next</label>
+        </div>
+        <div class="nav s4" aria-label="Navigation for card 4">
+          <label for="c3">Previous</label>
+          <label for="c5">Next</label>
+        </div>
+        <div class="nav s5" aria-label="Navigation for card 5">
+          <label for="c4">Previous</label>
+          <label for="c6">Next</label>
+        </div>
+        <div class="nav s6" aria-label="Navigation for card 6">
+          <label for="c5">Previous</label>
+          <label for="c7">Next</label>
+        </div>
+        <div class="nav s7" aria-label="Navigation for card 7">
+          <label for="c6">Previous</label>
+          <label for="c8">Next</label>
+        </div>
+        <div class="nav s8" aria-label="Navigation for card 8">
+          <label for="c7">Previous</label>
+          <label for="c9">Next</label>
+        </div>
+        <div class="nav s9" aria-label="Navigation for card 9">
+          <label for="c8">Previous</label>
+          <label for="c10">Next</label>
+        </div>
+        <div class="nav s10" aria-label="Navigation for card 10">
+          <label for="c9">Previous</label>
+        </div>
+
+      </fieldset>
+    </form>
   </div>
 </body>
 </html>
