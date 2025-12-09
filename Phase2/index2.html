@@ -1,162 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FileShare and User Group Drive Migration Hub</title>
-  <style>
-    body {
-      font-family: Aptos, sans-serif;
-      margin: 0;
-      background-color: #d3d3d3; /* Grey background */
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FileShare and User Group Drive Migration Hub</title>
+<style>
+  /* Base */
+  :root {
+    --blue-dark: #00008B;
+    --blue-royal: #4169E1;
+    --blue-soft: #e9eefc;
+    --blue-soft-border: #cbd6ff;
+    --blue-soft-hover: #dbe5ff;
+    --bg-grey: #d3d3d3;
+    --text: #222;
+  }
 
-    header {
-      background-color: #00008B; /* Dark blue */
-      color: white;
-      text-align: center;
-      padding: 20px;
-      font-size: 1.8em;
-      font-weight: bold;
-    }
+  body {
+    font-family: Aptos, Segoe UI, Arial, sans-serif;
+    margin: 0;
+    background-color: var(--bg-grey);
+    color: var(--text);
+  }
 
-    .viewer {
-      max-width: 800px;
-      margin: 30px auto;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      padding: 20px;
-      min-height: 300px;
-      overflow-y: auto;
-      text-align: center;
-    }
+  header {
+    background-color: var(--blue-dark);
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    font-size: 1.8em;
+    font-weight: bold;
+  }
 
-    .viewer h2 {
-      color: #4169E1; /* Royal blue */
-      margin-bottom: 20px;
-    }
+  .viewer {
+    max-width: 900px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    padding: 24px;
+    min-height: 380px;
+    overflow-y: auto;
+  }
 
-    .card {
-      display: none;
-      padding: 15px;
-      font-size: 1.1em;
-    }
+  /* Hide the radios controlling state but keep them focusable for a11y */
+  input[type="radio"][name="cards"] {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+  }
 
-    .card.active {
-      display: block;
-    }
+  /* Card content */
+  .cards {
+    margin-top: 10px;
+  }
+  .cards .card {
+    display: none;
+    padding: 10px 6px;
+    font-size: 1.05em;
+    line-height: 1.5;
+  }
+  .cards .card h3 {
+    color: var(--blue-royal);
+    margin: 0 0 10px 0;
+    font-size: 1.25em;
+  }
 
-    .nav-buttons {
-      text-align: center;
-      margin-top: 15px;
-    }
+  /* Show the card matching the checked radio */
+  #c1:checked ~ .cards .card:nth-child(1),
+  #c2:checked ~ .cards .card:nth-child(2),
+  #c3:checked ~ .cards .card:nth-child(3),
+  #c4:checked ~ .cards .card:nth-child(4),
+  #c5:checked ~ .cards .card:nth-child(5),
+  #c6:checked ~ .cards .card:nth-child(6),
+  #c7:checked ~ .cards .card:nth-child(7),
+  #c8:checked ~ .cards .card:nth-child(8),
+  #c9:checked ~ .cards .card:nth-child(9),
+  #c10:checked ~ .cards .card:nth-child(10) {
+    display: block;
+  }
 
-    .nav-buttons button {
-      background-color: #00008B; /* Dark blue */
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin: 0 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
+  /* Per-card Prev/Next nav */
+  .nav {
+    display: none; /* default hidden, only active one shows */
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .nav label {
+    background: var(--blue-soft);
+    color: var(--blue-dark);
+    border: 1px solid var(--blue-soft-border);
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .nav label:hover { background: var(--blue-soft-hover); }
+  .nav label:focus-visible {
+    outline: 3px solid var(--blue-royal);
+    outline-offset: 2px;
+  }
 
-    .nav-buttons button:hover {
-      background-color: #27408b; /* Dark slate blue */
-    }
+  /* Show only the nav block that matches the checked radio */
+  #c1:checked ~ .nav.s1,
+  #c2:checked ~ .nav.s2,
+  #c3:checked ~ .nav.s3,
+  #c4:checked ~ .nav.s4,
+  #c5:checked ~ .nav.s5,
+  #c6:checked ~ .nav.s6,
+  #c7:checked ~ .nav.s7,
+  #c8:checked ~ .nav.s8,
+  #c9:checked ~ .nav.s9,
+  #c10:checked ~ .nav.s10 {
+    display: flex;
+  }
 
-    .progress {
-      text-align: center;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-  </style>
+  /* Progress text */
+  .progress {
+    text-align: center;
+    margin-top: 12px;
+    font-weight: bold;
+  }
+  .progress p { display: none; margin: 0; }
+  #c1:checked ~ .progress .p1,
+  #c2:checked ~ .progress .p2,
+  #c3:checked ~ .progress .p3,
+  #c4:checked ~ .progress .p4,
+  #c5:checked ~ .progress .p5,
+  #c6:checked ~ .progress .p6,
+  #c7:checked ~ .progress .p7,
+  #c8:checked ~ .progress .p8,
+  #c9:checked ~ .progress .p9,
+  #c10:checked ~ .progress .p10 {
+    display: block;
+  }
+
+  /* Optional: numbered quick-jump */
+  .quickjump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 14px;
+  }
+  .quickjump label {
+    background: var(--blue-soft);
+    color: var(--blue-dark);
+    border: 1px solid var(--blue-soft-border);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .quickjump label:hover { background: var(--blue-soft-hover); }
+  .quickjump label:focus-visible {
+    outline: 3px solid var(--blue-royal);
+    outline-offset: 2px;
+  }
+
+  /* Reduce motion, respectful */
+  @media (prefers-reduced-motion: reduce) {
+    * { scroll-behavior: auto !important; }
+  }
+</style>
 </head>
 <body>
   <header>FileShare and User Group Drive Migration Hub</header>
 
-  <div class="viewer" id="cards-container">
-    <h2>Phase 2 – Personal Drive Migration</h2>
+  <div class="viewer">
+    <!-- State (no JS): radios determine which card is visible -->
+    <input type="radio" name="cards" id="c1" checked />
+    <input type="radio" name="cards" id="c2" />
+    <input type="radio" name="cards" id="c3" />
+    <input type="radio" name="cards" id="c4" />
+    <input type="radio" name="cards" id="c5" />
+    <input type="radio" name="cards" id="c6" />
+    <input type="radio" name="cards" id="c7" />
+    <input type="radio" name="cards" id="c8" />
+    <input type="radio" name="cards" id="c9" />
+    <input type="radio" name="cards" id="c10" />
 
-    <!-- Cards start here -->
-    <div class="card active">
-      <h2>Card 1: Introduction to Phase 2</h2>
-      <p>This phase introduces the initiative and explains why we’re moving to cloud-based file sharing. It includes background information, objectives, and expected outcomes.</p>
+    <!-- Cards -->
+    <div class="cards">
+      <div class="card" role="region" aria-labelledby="h1">
+        <h3 id="h1">Phase 1 – Read-Only Restricted Access</h3>
+        <p>Introduce the migration program, its objectives, timelines, and the read-only phase rules. Include contact info and links to guidance.</p>
+      </div>
+      <div class="card" role="region" aria-labelledby="h2">
+        <h3 id="h2">Phase 2 – Inventory & Classification</h3>
+        <p>How to identify high-value records, ROT (redundant, obsolete, trivial), personal info, and protected B content.</p>
+      </div>
+      <div class="card" role="region" aria-labelledby="h3">
+        <h3 id="h3">Phase 3 – Security & Access Mapping</h3>
+        <p>Map AD groups to modern workspaces, least-privilege setup, and approval flows.</p>
+      </div>
+      <div class="card" role="region" aria-labelledby="h4">
+        <h3 id="h4">Phase 4 – Structure & Metadata</h3>
+        <p>Target structure, naming standards, metadata tags, retention categories.</p>
+      </div>
+      <div class="card" role="region" aria-labelledby="h5">
+        <h3 id="h5">Phase 5 – Pre-Migration Readiness</h3>
+        <p>Validation checklist, scope freeze, remediation for long paths, illegal chars, and file locks.</p>
+      </div>
+      <div class="card" role="region" aria-labelledby="h6">
+        <h3 id="h6">Phase 6 – Migration Execution</h3>
+        <p>Cutover windows, tooling (e.g., Mover, SharePoint Migration Tool), logging, and rollback plan.</p>
+      </div>
+      <div class="card" role="region" aria-labelledby="h7">
+        <h3 id="h7">Phase 7 – Verification & QA</h3>
+        <p>Post-migration validation, sampling strategy, permissions checks, hash comparisons if applicable.</p>
+      </div>
+      <div class="card" role="region" aria-labelledby="h8">
+        <h3 id="h8">Phase 8 – Training & Adoption</h3>
+        <p>Quick start guides, governance guardrails, change management, champions program.</p>
+      </div>
+      <div class="card" role="region" aria-labelledby="h9">
+        <h3 id="h9">Phase 9 – Decommissioning</h3>
+        <p>Read-only enforcement, final backups, attestation records, and drive retirement.</p>
+      </div>
+      <div class="card" role="region" aria-labelledby="h10">
+        <h3 id="h10">Phase 10 – Continuous Improvement</h3>
+        <p>Feedback loop, metrics (findability, retention compliance), backlog of enhancements.</p>
+      </div>
     </div>
-    <div class="card">
-      <h2>Card 2: Why Read-Only Access?</h2>
-      <p>Read-only access ensures data integrity and prevents unauthorized changes during the transition period. This approach minimizes risk and maintains compliance.</p>
-    </div>
-    <div class="card">
-      <h2>Card 3: Benefits of Restricted Access</h2>
-      <p>Restricted access improves security, reduces accidental data loss, and ensures that only approved personnel can make changes to critical files.</p>
-    </div>
-    <div class="card">
-      <h2>Card 4: Security Enhancements</h2>
-      <p>Enhanced security measures include encryption, multi-factor authentication, and strict permission controls to safeguard sensitive information.</p>
-    </div>
-    <div class="card">
-      <h2>Card 5: Compliance Requirements</h2>
-      <p>Compliance with government standards and policies is mandatory. This phase aligns with TBS directives and SSC security protocols.</p>
-    </div>
-    <div class="card">
-      <h2>Card 6: User Responsibilities</h2>
-      <p>Users must follow guidelines for accessing files, report any issues promptly, and avoid attempts to bypass restrictions.</p>
-    </div>
-    <div class="card">
-      <h2>Card 7: Timeline Overview</h2>
-      <p>The transition will occur in stages, starting with read-only access, followed by migration to cloud-based systems. Key milestones will be communicated regularly.</p>
-    </div>
-    <div class="card">
-      <h2>Card 8: Support Resources</h2>
-      <p>Support is available through the IT Service Desk, online documentation, and training sessions. Contact details will be provided in the next steps.</p>
-    </div>
-    <div class="card">
-      <h2>Card 9: FAQs</h2>
-      <p>Common questions about access, security, and migration will be addressed in this section. Additional queries can be submitted to the support team.</p>
-    </div>
-    <div class="card">
-      <h2>Card 10: Next Steps</h2>
-      <p>Prepare for the upcoming migration phase by reviewing guidelines, attending training, and ensuring compliance with security protocols.</p>
-    </div>
-    <!-- Cards end here -->
 
-    <div class="nav-buttons">
-      <button id="prevBtn">Previous</button>
-      <button id="nextBtn">Next</button>
+    <!-- Prev/Next (per-card nav shown via CSS) -->
+    <div class="nav s1" aria-label="Navigation for card 1">
+      <label for="c10" aria-label="Previous">Previous</label>
+      <label for="c2" aria-label="Next">Next</label>
     </div>
-    <div class="progress" id="progress">
-      Card 1 of 10
+    <div class="nav s2" aria-label="Navigation for card 2">
+      <label for="c1" aria-label="Previous">Previous</label>
+      <label for="c3" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s3" aria-label="Navigation for card 3">
+      <label for="c2" aria-label="Previous">Previous</label>
+      <label for="c4" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s4" aria-label="Navigation for card 4">
+      <label for="c3" aria-label="Previous">Previous</label>
+      <label for="c5" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s5" aria-label="Navigation for card 5">
+      <label for="c4" aria-label="Previous">Previous</label>
+      <label for="c6" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s6" aria-label="Navigation for card 6">
+      <label for="c5" aria-label="Previous">Previous</label>
+      <label for="c7" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s7" aria-label="Navigation for card 7">
+      <label for="c6" aria-label="Previous">Previous</label>
+      <label for="c8" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s8" aria-label="Navigation for card 8">
+      <label for="c7" aria-label="Previous">Previous</label>
+      <label for="c9" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s9" aria-label="Navigation for card 9">
+      <label for="c8" aria-label="Previous">Previous</label>
+      <label for="c10" aria-label="Next">Next</label>
+    </div>
+    <div class="nav s10" aria-label="Navigation for card 10">
+      <label for="c9" aria-label="Previous">Previous</label>
+      <label for="c1" aria-label="Next">Next</label>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress" aria-live="polite">
+      <p class="p1">Card 1 of 10</p>
+      <p class="p2">Card 2 of 10</p>
+      <p class="p3">Card 3 of 10</p>
+      <p class="p4">Card 4 of 10</p>
+      <p class="p5">Card 5 of 10</p>
+      <p class="p6">Card 6 of 10</p>
+      <p class="p7">Card 7 of 10</p>
+      <p class="p8">Card 8 of 10</p>
+      <p class="p9">Card 9 of 10</p>
+      <p class="p10">Card 10 of 10</p>
+    </div>
+
+    <!-- Optional: numbered quick-jump -->
+    <div class="quickjump" aria-label="Jump to card">
+      <label for="c1" title="Card 1">1</label>
+      <label for="c2" title="Card 2">2</label>
+      <label for="c3" title="Card 3">3</label>
+      <label for="c4" title="Card 4">4</label>
+      <label for="c5" title="Card 5">5</label>
+      <label for="c6" title="Card 6">6</label>
+      <label for="c7" title="Card 7">7</label>
+      <label for="c8" title="Card 8">8</label>
+      <label for="c9" title="Card 9">9</label>
+      <label for="c10" title="Card 10">10</label>
     </div>
   </div>
-
-  <script>
-    const cards = document.querySelectorAll('.card');
-    const progress = document.getElementById('progress');
-    const nextBtn = document.getElementById('nextBtn');
-    const prevBtn = document.getElementById('prevBtn');
-
-    let currentIndex = 0;
-
-    function updateCard() {
-      cards.forEach(card => card.classList.remove('active'));
-      cards[currentIndex].classList.add('active');
-      progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
-    }
-
-    nextBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % cards.length;
-      updateCard();
-    });
-
-    prevBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + cards.length) % cards.length;
-      updateCard();
-    });
-
-    updateCard(); // Show first card
-  </script>
 </body>
-</html>
